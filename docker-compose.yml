@@ -1,0 +1,17 @@
+version: "3"
+services:
+  java-data-collector:
+    image: bitnami/postgresql
+    container_name: java-data-collector
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRESQL_DATABASE=postgres
+      - POSTGRESQL_USERNAME=postgres
+    ports:
+      - "5431:5432"
+    networks:
+      - backend
+
+networks:
+  backend:
