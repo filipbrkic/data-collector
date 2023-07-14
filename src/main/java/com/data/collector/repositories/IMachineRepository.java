@@ -13,6 +13,6 @@ public interface IMachineRepository {
     Machines findById(UUID id);
 
     Machines updateMachine(Machines machine);
-    
+
     void deleteMachine(UUID id);
 }

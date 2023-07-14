@@ -12,22 +12,26 @@ import org.springframework.stereotype.Component;
 
 import com.data.collector.models.Machines;
 import com.data.collector.repositories.IMachineRepository;
+import com.data.collector.utils.SlackAlerts;
 
 @Component
 public class Scheduler {
 
     private IMachineRepository machineRepository;
+    private SlackAlerts slackAlerts;
 
-    public Scheduler(IMachineRepository machineRepository) {
+    public Scheduler(IMachineRepository machineRepository, SlackAlerts slackAlerts) {
         this.machineRepository = machineRepository;
+        this.slackAlerts = slackAlerts;
     }
 
-    @Scheduled(cron="0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/25 * * * ?")
     public void cronJobSch() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now = new Date();
         String strDate = sdf.format(now);
-        System.out.println("Java cron job expression:: " + strDate);
+        System.out.println("Cron job started:: " + strDate);
+
         List<Machines> machines = machineRepository.findAll();
 
         List<Map<String, Object>> data = machines.stream().map(machine -> {
@@ -40,6 +44,7 @@ public class Scheduler {
             return machineData;
         }).collect(Collectors.toList());
 
-        System.out.println(data);
-   }
+        slackAlerts.notifications(data);
+        System.out.println("Cron job finished.");
+    }
 }

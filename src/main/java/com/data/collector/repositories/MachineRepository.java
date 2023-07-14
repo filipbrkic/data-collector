@@ -11,7 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 
 @Repository
-public class MachineRepository implements IMachineRepository{
+public class MachineRepository implements IMachineRepository {
 
     private EntityManager entityManager;
 
@@ -21,40 +21,58 @@ public class MachineRepository implements IMachineRepository{
 
     @Override
     public Machines addMachine(Machines machine) {
-        Machines dbMachine = entityManager.merge(machine);
+        try {
+            Machines dbMachine = entityManager.merge(machine);
 
-        return dbMachine;
+            return dbMachine;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<Machines> findAll() {
-        TypedQuery<Machines> query = entityManager.createQuery("from Machines", Machines.class);
+        try {
+            TypedQuery<Machines> query = entityManager.createQuery("from Machines", Machines.class);
 
-        List<Machines> machines = query.getResultList();
+            List<Machines> machines = query.getResultList();
 
-        return machines;
+            return machines;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Machines findById(UUID id) {
-        Machines machine = entityManager.find(Machines.class, id);
+        try {
+            Machines machine = entityManager.find(Machines.class, id);
 
-        return machine;
+            return machine;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Machines updateMachine(Machines machine) {
+        try {
+            Machines dbMachine = entityManager.merge(machine);
 
-        Machines dbMachine = entityManager.merge(machine);
-
-        return dbMachine;
+            return dbMachine;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void deleteMachine(UUID id) {
-        Machines machine = entityManager.find(Machines.class, id);
+        try {
+            Machines machine = entityManager.find(Machines.class, id);
 
-        entityManager.remove(machine);
+            entityManager.remove(machine);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-    
 }

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "890842aa-1234-5432-a1c3-49286c856d50",
+    "machine_id": "1dc5a1d0-c614-4c8b-a141-ea69fd1f40ae",
+    "hostname": "test-machine-name-1",
+    "timeout": 0,
+    "num_gpus": 8,
+    "total_flops": 20.21,
+    "gpu_name": "RTX 4060",
+    "gpu_ram": 12345,
+    "gpu_max_cur_temp": 80,
+    "cpu_name": "INTEL 2211",
+    "earn_day": 111.12,
+    "error_description": null
+  },
+  {
+    "id": "9fac5df8-1234-4321-9fe9-f0ff07bd00f4",
+    "machine_id": "fff1c232-1c97-4fd9-9bdf-530d37092201",
+    "hostname": "test-machine-name-2",
+    "timeout": 5,
+    "num_gpus": 12,
+    "total_flops": 50.55,
+    "gpu_name": "RTX 4090TI",
+    "gpu_ram": 54321,
+    "gpu_max_cur_temp": 90,
+    "cpu_name": "AMD 2222",
+    "earn_day": 200.31,
+    "error_description": "Unknown Error"
+  }
+]
