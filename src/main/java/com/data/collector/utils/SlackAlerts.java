@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.data.collector.models.Webhook;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import redis.clients.jedis.Jedis;
 
@@ -15,6 +16,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class SlackAlerts {
+
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.data.redis.port}")
+    private int redisPort;
 
     private Webhook getWebhook;
 
@@ -50,7 +57,7 @@ public class SlackAlerts {
     public Boolean isMessageSent(String machine_id) {
         Jedis jedis = null;
         try {
-            jedis = new Jedis("localhost", 6379);
+            jedis = new Jedis(redisHost, redisPort);
 
             boolean exists = jedis.exists(machine_id);
 
