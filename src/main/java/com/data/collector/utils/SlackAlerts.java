@@ -26,26 +26,11 @@ public class SlackAlerts {
         try {
             ArrayList<String> message = new ArrayList<>();
             for (Map<String, Object> i : data) {
-                if (i.get("timeout") != null) {
-                    message.add("The machine " + i.get("machine_id") + " " + i.get("hostname")
-                            + " requires your attention. The machine is unavailable and last seen " + i.get("timeout")
-                            + " seconds ago.");
-                }
+                message = generateTimeoutMessage(i, message);
 
-                if (i.get("error_description") != null) {
-                    message.add("The machine " + i.get("machine_id") + " " + i.get("hostname")
-                            + " requires your attention. The machine has an error: " + i.get("error_description")
-                            + ".");
-                }
+                message = generateErrorDescriptionMessage(i, message);
 
-                if (i.get("gpu_max_cur_temp") instanceof Integer) {
-                    int temperature = (Integer) i.get("gpu_max_cur_temp");
-                    if (temperature > 88) {
-                        message.add("The machine " + i.get("machine_id") + " " + i.get("hostname")
-                                + " requires your attention. The GPU temperature is too high, currently " + temperature
-                                + "\u00B0 and the machine needs to be checked.");
-                    }
-                }
+                message = generateTemperatureMessage(i, message);
 
                 if (message.size() > 0) {
                     String machineId = i.get("machine_id").toString();
@@ -117,5 +102,37 @@ public class SlackAlerts {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public ArrayList<String> generateTimeoutMessage(Map<String, Object> i, ArrayList<String> message) {
+        if ((int) i.get("timeout") > 0) {
+            message.add("The machine " + i.get("machine_id") + " " + i.get("hostname")
+                    + " requires your attention. The machine is unavailable and last seen " + i.get("timeout")
+                    + " seconds ago.");
+        }
+
+        return message;
+    }
+
+    public ArrayList<String> generateErrorDescriptionMessage(Map<String, Object> i, ArrayList<String> message) {
+        if (i.get("error_description") != null) {
+            message.add("The machine " + i.get("machine_id") + " " + i.get("hostname")
+                    + " requires your attention. The machine has an error: " + i.get("error_description") + ".");
+        }
+
+        return message;
+    }
+
+    public ArrayList<String> generateTemperatureMessage(Map<String, Object> i, ArrayList<String> message) {
+        if (i.get("gpu_max_cur_temp") instanceof Integer) {
+            int temperature = (Integer) i.get("gpu_max_cur_temp");
+            if (temperature > 88) {
+                message.add("The machine " + i.get("machine_id") + " " + i.get("hostname")
+                        + " requires your attention. The GPU temperature is too high, currently " + temperature
+                        + "\u00B0 and the machine needs to be checked.");
+            }
+        }
+
+        return message;
     }
 }
