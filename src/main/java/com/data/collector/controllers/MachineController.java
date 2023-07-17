@@ -34,7 +34,7 @@ public class MachineController {
 
             return new ResponseEntity<Machines>(dbMachine, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("An error occurred while adding the machine: " + e.getMessage(),
+            return new ResponseEntity<String>("An error occurred while adding the machine: " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -44,7 +44,7 @@ public class MachineController {
         try {
             return new ResponseEntity<List<Machines>>(machineServices.findAll(), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("An error occurred while catching machines: " + e.getMessage(),
+            return new ResponseEntity<String>("An error occurred while catching machines: " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -60,7 +60,7 @@ public class MachineController {
 
             return new ResponseEntity<Machines>(machine, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(
+            return new ResponseEntity<String>(
                     "An error occurred while catching the machine - " + machineId + ": " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -74,7 +74,7 @@ public class MachineController {
 
             return new ResponseEntity<Machines>(dbMachine, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(
+            return new ResponseEntity<String>(
                     "An error occurred while updating the machine - " + machineId + ": " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
