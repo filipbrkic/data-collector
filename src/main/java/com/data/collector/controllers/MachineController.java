@@ -57,7 +57,7 @@ public class MachineController {
         try {
             Optional<Machines> machine = machineServices.findById(machineId);
 
-            if (machine == null) {
+            if (machine.isEmpty()) {
                 throw new RuntimeException("Machine id not found - " + machineId);
             }
 

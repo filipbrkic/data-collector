@@ -1,5 +1,6 @@
 package com.data.collector.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -11,6 +12,8 @@ public interface IMachineServices {
     Machines addMachine(Machines machine);
 
     Page<Machines> findAll(Integer pageNo, Integer pageSize);
+
+    List<Machines> findAll();
 
     Optional<Machines> findById(UUID id);
 

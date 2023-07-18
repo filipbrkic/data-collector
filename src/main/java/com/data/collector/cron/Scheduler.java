@@ -11,17 +11,17 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.data.collector.models.Machines;
-import com.data.collector.repositories.IMachineRepository;
+import com.data.collector.services.IMachineServices;
 import com.data.collector.utils.SlackAlerts;
 
 @Component
 public class Scheduler {
 
-    private IMachineRepository machineRepository;
+    private IMachineServices machineServices;
     private SlackAlerts slackAlerts;
 
-    public Scheduler(IMachineRepository machineRepository, SlackAlerts slackAlerts) {
-        this.machineRepository = machineRepository;
+    public Scheduler(IMachineServices machineServices, SlackAlerts slackAlerts) {
+        this.machineServices = machineServices;
         this.slackAlerts = slackAlerts;
     }
 
@@ -32,7 +32,7 @@ public class Scheduler {
         String strDate = sdf.format(now);
         System.out.println("Cron job started:: " + strDate);
 
-        List<Machines> machines = machineRepository.findAll();
+        List<Machines> machines = machineServices.findAll();
 
         List<Map<String, Object>> data = machines.stream().map(machine -> {
             Map<String, Object> machineData = new HashMap<>();
