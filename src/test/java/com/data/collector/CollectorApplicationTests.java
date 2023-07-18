@@ -4,9 +4,11 @@ import com.data.collector.models.Machines;
 import com.data.collector.repositories.IMachineRepository;
 import com.data.collector.services.IMachineServices;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
@@ -25,17 +27,19 @@ class CollectorApplicationTests {
     @Mock
     private IMachineRepository machineRepository;
 
-    @Autowired
-    public CollectorApplicationTests(IMachineServices machineServices, IMachineRepository machineRepository) {
-        this.machineServices = machineServices;
-        this.machineRepository = machineRepository;
+    List<Machines> fakeData;
+
+    @BeforeEach
+    void setup() throws IOException {
+        MockitoAnnotations.openMocks(this);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        fakeData = objectMapper.readValue(new File("src/test/java/com/data/collector/Machines.json"),
+                objectMapper.getTypeFactory().constructCollectionType(List.class, Machines.class));
     }
 
     @Test
     void contextLoads() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<Machines> fakeData = objectMapper.readValue(new File("src/test/java/com/data/collector/Machines.json"),
-                objectMapper.getTypeFactory().constructCollectionType(List.class, Machines.class));
         when(machineServices.findAll()).thenReturn(fakeData);
         List<Machines> machines = machineServices.findAll();
 
