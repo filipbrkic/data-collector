@@ -1,18 +1,11 @@
 package com.data.collector.repositories;
 
-import java.util.List;
 import java.util.UUID;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.data.collector.models.Machines;
 
-public interface IMachineRepository {
-    Machines addMachine(Machines machine);
+public interface IMachineRepository extends JpaRepository<Machines, UUID> {
 
-    List<Machines> findAll();
-
-    Machines findById(UUID id);
-
-    Machines updateMachine(Machines machine);
-
-    void deleteMachine(UUID id);
 }

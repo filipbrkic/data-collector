@@ -1,8 +1,9 @@
 package com.data.collector.controllers;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.data.collector.models.Machines;
@@ -40,9 +42,10 @@ public class MachineController {
     }
 
     @GetMapping("/machines")
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(@RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "10") Integer pageSize) {
         try {
-            return new ResponseEntity<List<Machines>>(machineServices.findAll(), HttpStatus.OK);
+            return new ResponseEntity<Page<Machines>>(machineServices.findAll(pageNo, pageSize), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>("An error occurred while catching machines: " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,13 +55,13 @@ public class MachineController {
     @GetMapping("/machines/{machineId}")
     public ResponseEntity<?> findById(@PathVariable UUID machineId) {
         try {
-            Machines machine = machineServices.findById(machineId);
+            Optional<Machines> machine = machineServices.findById(machineId);
 
             if (machine == null) {
                 throw new RuntimeException("Machine id not found - " + machineId);
             }
 
-            return new ResponseEntity<Machines>(machine, HttpStatus.OK);
+            return new ResponseEntity<Optional<Machines>>(machine, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>(
                     "An error occurred while catching the machine - " + machineId + ": " + e.getMessage(),

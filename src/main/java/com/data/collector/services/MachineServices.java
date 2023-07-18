@@ -1,10 +1,13 @@
 package com.data.collector.services;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.data.collector.models.Machines;
@@ -41,23 +44,24 @@ public class MachineServices implements IMachineServices {
             machine.setGpu_max_cur_temp(temperature);
             machine.setError_description(error_description);
 
-            return machineRepository.addMachine(machine);
+            return machineRepository.save(machine);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Machines> findAll() {
+    public Page<Machines> findAll(Integer pageNo, Integer pageSize) {
         try {
-            return machineRepository.findAll();
+            Pageable paging = PageRequest.of(pageNo, pageSize);
+            return machineRepository.findAll(paging);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Machines findById(UUID id) {
+    public Optional<Machines> findById(UUID id) {
         try {
             return machineRepository.findById(id);
         } catch (Exception e) {
@@ -69,7 +73,7 @@ public class MachineServices implements IMachineServices {
     @Override
     public Machines updateMachine(Machines machine, UUID machineId) {
         try {
-            Machines existingMachine = machineRepository.findById(machineId);
+            Machines existingMachine = machineRepository.getReferenceById(machineId);
 
             if (existingMachine == null) {
                 throw new RuntimeException("Machine id not found - " + machineId);
@@ -102,7 +106,7 @@ public class MachineServices implements IMachineServices {
             existingMachine.setGpu_max_cur_temp(existingMachine.getGpu_max_cur_temp());
             existingMachine.setError_description(existingMachine.getError_description());
 
-            return machineRepository.updateMachine(existingMachine);
+            return machineRepository.save(existingMachine);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -112,13 +116,13 @@ public class MachineServices implements IMachineServices {
     @Override
     public void deleteMachine(UUID id) {
         try {
-            Machines machine = machineRepository.findById(id);
+            Machines machine = machineRepository.getReferenceById(id);
 
             if (machine == null) {
                 throw new RuntimeException("Machine id not found - " + id);
             }
 
-            machineRepository.deleteMachine(id);
+            machineRepository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
