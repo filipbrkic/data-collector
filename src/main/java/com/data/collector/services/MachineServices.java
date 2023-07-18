@@ -35,6 +35,8 @@ public class MachineServices implements IMachineServices {
             String error_description = null;
             int timeout = ThreadLocalRandom.current().nextInt(0, 2);
             int temperature = ThreadLocalRandom.current().nextInt(85, 95);
+            float earn_day = ThreadLocalRandom.current().nextFloat(0, 20);
+            float total_flops = ThreadLocalRandom.current().nextFloat(0, 20);
 
             if (!rd.nextBoolean()) {
                 error_description = "Unknown Error";
@@ -44,6 +46,8 @@ public class MachineServices implements IMachineServices {
             machine.setTimeout(timeout);
             machine.setGpu_max_cur_temp(temperature);
             machine.setError_description(error_description);
+            machine.setEarn_day(earn_day);
+            machine.setTotal_flops(total_flops);
 
             return machineRepository.save(machine);
         } catch (Exception e) {
@@ -95,9 +99,6 @@ public class MachineServices implements IMachineServices {
             if (machine.getNum_gpus() != 0) {
                 existingMachine.setNum_gpus(machine.getNum_gpus());
             }
-            if (machine.getTotal_flops() != 0.0f) {
-                existingMachine.setTotal_flops(machine.getTotal_flops());
-            }
             if (machine.getGpu_name() != null && !machine.getGpu_name().isEmpty()) {
                 existingMachine.setGpu_name(machine.getGpu_name());
             }
@@ -107,14 +108,12 @@ public class MachineServices implements IMachineServices {
             if (machine.getCpu_name() != null && !machine.getCpu_name().isEmpty()) {
                 existingMachine.setCpu_name(machine.getCpu_name());
             }
-            if (machine.getEarn_day() != 0.0f) {
-                existingMachine.setEarn_day(machine.getEarn_day());
-            }
 
             existingMachine.setMachine_id(existingMachine.getMachine_id());
             existingMachine.setTimeout(existingMachine.getTimeout());
             existingMachine.setGpu_max_cur_temp(existingMachine.getGpu_max_cur_temp());
-            existingMachine.setError_description(existingMachine.getError_description());
+            existingMachine.setEarn_day(existingMachine.getEarn_day());
+            existingMachine.setTotal_flops(existingMachine.getTotal_flops());
 
             return machineRepository.save(existingMachine);
         } catch (Exception e) {
