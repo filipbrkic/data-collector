@@ -17,9 +17,6 @@ public class Machines {
     @Column(name = "id")
     private UUID id;
 
-    @Column(name = "machine_id")
-    private UUID machine_id;
-
     @Column(name = "hostname")
     private String hostname;
 
@@ -53,37 +50,12 @@ public class Machines {
     public Machines() {
     }
 
-    public Machines(UUID id, UUID machine_id, String hostname, int timeout, int num_gpus, float total_flops,
-            String gpu_name, int gpu_ram, int gpu_max_cur_temp, String cpu_name, float earn_day,
-            String error_description) {
-        this.id = id;
-        this.machine_id = machine_id;
-        this.hostname = hostname;
-        this.timeout = timeout;
-        this.num_gpus = num_gpus;
-        this.total_flops = total_flops;
-        this.gpu_name = gpu_name;
-        this.gpu_ram = gpu_ram;
-        this.gpu_max_cur_temp = gpu_max_cur_temp;
-        this.cpu_name = cpu_name;
-        this.earn_day = earn_day;
-        this.error_description = error_description;
-    }
-
     public UUID getId() {
         return this.id;
     }
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public UUID getMachine_id() {
-        return this.machine_id;
-    }
-
-    public void setMachine_id(UUID machine_id) {
-        this.machine_id = machine_id;
     }
 
     public String getHostname() {
@@ -168,10 +140,11 @@ public class Machines {
 
     @Override
     public String toString() {
-        return "{" + " id='" + getId() + "'" + ", machine_id='" + getMachine_id() + "'" + ", hostname='" + getHostname()
-                + "'" + ", timeout='" + getTimeout() + "'" + ", num_gpus='" + getNum_gpus() + "'" + ", total_flops='"
-                + getTotal_flops() + "'" + ", gpu_name='" + getGpu_name() + "'" + ", gpu_ram='" + getGpu_ram() + "'"
-                + ", gpu_max_cur_temp='" + getGpu_max_cur_temp() + "'" + ", cpu_name='" + getCpu_name() + "'"
-                + ", earn_day='" + getEarn_day() + "'" + ", error_description='" + getError_description() + "'" + "}";
+        return "{" + " id='" + getId() + "'" + ", hostname='" + getHostname() + "'" + ", timeout='" + getTimeout() + "'"
+                + ", num_gpus='" + getNum_gpus() + "'" + ", total_flops='" + getTotal_flops() + "'" + ", gpu_name='"
+                + getGpu_name() + "'" + ", gpu_ram='" + getGpu_ram() + "'" + ", gpu_max_cur_temp='"
+                + getGpu_max_cur_temp() + "'" + ", cpu_name='" + getCpu_name() + "'" + ", earn_day='" + getEarn_day()
+                + "'" + ", error_description='" + getError_description() + "'" + "}";
     }
+
 }

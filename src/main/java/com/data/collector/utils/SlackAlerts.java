@@ -40,8 +40,8 @@ public class SlackAlerts {
                 message = generateTemperatureMessage(i, message);
 
                 if (message.size() > 0) {
-                    String machineId = i.get("machine_id").toString();
-                    Boolean redis = this.isMessageSent(machineId);
+                    String id = i.get("id").toString();
+                    Boolean redis = this.isMessageSent(id);
                     if (redis == false) {
                         this.sendMessage(message);
                     }
@@ -54,20 +54,20 @@ public class SlackAlerts {
         }
     }
 
-    public Boolean isMessageSent(String machine_id) {
+    public Boolean isMessageSent(String id) {
         Jedis jedis = null;
         try {
             jedis = new Jedis(redisHost, redisPort);
 
-            boolean exists = jedis.exists(machine_id);
+            boolean exists = jedis.exists(id);
 
             if (exists != false) {
                 jedis.close();
                 return true;
             }
 
-            jedis.set(machine_id, machine_id);
-            jedis.expire(machine_id, 3600);
+            jedis.set(id, id);
+            jedis.expire(id, 3600);
 
             jedis.close();
 
@@ -114,7 +114,7 @@ public class SlackAlerts {
     public ArrayList<String> generateTimeoutMessage(Map<String, Object> i, ArrayList<String> message) {
         try {
             if ((int) i.get("timeout") > 0) {
-                message.add("The machine " + i.get("machine_id") + " " + i.get("hostname")
+                message.add("The machine " + i.get("id") + " " + i.get("hostname")
                         + " requires your attention. The machine is unavailable and last seen " + i.get("timeout")
                         + " seconds ago.");
             }
@@ -128,7 +128,7 @@ public class SlackAlerts {
     public ArrayList<String> generateErrorDescriptionMessage(Map<String, Object> i, ArrayList<String> message) {
         try {
             if (i.get("error_description") != null) {
-                message.add("The machine " + i.get("machine_id") + " " + i.get("hostname")
+                message.add("The machine " + i.get("id") + " " + i.get("hostname")
                         + " requires your attention. The machine has an error: " + i.get("error_description") + ".");
             }
 
@@ -143,7 +143,7 @@ public class SlackAlerts {
             if (i.get("gpu_max_cur_temp") instanceof Integer) {
                 int temperature = (Integer) i.get("gpu_max_cur_temp");
                 if (temperature > 88) {
-                    message.add("The machine " + i.get("machine_id") + " " + i.get("hostname")
+                    message.add("The machine " + i.get("id") + " " + i.get("hostname")
                             + " requires your attention. The GPU temperature is too high, currently " + temperature
                             + "\u00B0 and the machine needs to be checked.");
                 }

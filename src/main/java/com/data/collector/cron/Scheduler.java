@@ -36,7 +36,6 @@ public class Scheduler {
 
         List<Map<String, Object>> data = machines.stream().map(machine -> {
             Map<String, Object> machineData = new HashMap<>();
-            machineData.put("machine_id", machine.getMachine_id());
             machineData.put("error_description", machine.getError_description());
             machineData.put("timeout", machine.getTimeout());
             machineData.put("gpu_max_cur_temp", machine.getGpu_max_cur_temp());

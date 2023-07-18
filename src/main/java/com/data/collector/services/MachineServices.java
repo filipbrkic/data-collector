@@ -29,7 +29,6 @@ public class MachineServices implements IMachineServices {
     @Override
     public Machines addMachine(Machines machine) {
         try {
-            UUID uuid = UUID.randomUUID();
             Random rd = new Random();
 
             String error_description = null;
@@ -42,7 +41,6 @@ public class MachineServices implements IMachineServices {
                 error_description = "Unknown Error";
             }
 
-            machine.setMachine_id(uuid);
             machine.setTimeout(timeout);
             machine.setGpu_max_cur_temp(temperature);
             machine.setError_description(error_description);
@@ -85,12 +83,12 @@ public class MachineServices implements IMachineServices {
 
     @Transactional
     @Override
-    public Machines updateMachine(Machines machine, UUID machineId) {
+    public Machines updateMachine(Machines machine, UUID id) {
         try {
-            Machines existingMachine = machineRepository.getReferenceById(machineId);
+            Machines existingMachine = machineRepository.getReferenceById(id);
 
             if (existingMachine == null) {
-                throw new RuntimeException("Machine id not found - " + machineId);
+                throw new RuntimeException("Machine id not found - " + id);
             }
 
             if (machine.getHostname() != null && !machine.getHostname().isEmpty()) {
@@ -109,7 +107,6 @@ public class MachineServices implements IMachineServices {
                 existingMachine.setCpu_name(machine.getCpu_name());
             }
 
-            existingMachine.setMachine_id(existingMachine.getMachine_id());
             existingMachine.setTimeout(existingMachine.getTimeout());
             existingMachine.setGpu_max_cur_temp(existingMachine.getGpu_max_cur_temp());
             existingMachine.setEarn_day(existingMachine.getEarn_day());

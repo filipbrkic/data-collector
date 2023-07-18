@@ -52,47 +52,47 @@ public class MachineController {
         }
     }
 
-    @GetMapping("/machines/{machineId}")
-    public ResponseEntity<?> findById(@PathVariable UUID machineId) {
+    @GetMapping("/machines/{id}")
+    public ResponseEntity<?> findById(@PathVariable UUID id) {
         try {
-            Optional<Machines> machine = machineServices.findById(machineId);
+            Optional<Machines> machine = machineServices.findById(id);
 
             if (machine.isEmpty()) {
-                throw new RuntimeException("Machine id not found - " + machineId);
+                throw new RuntimeException("Machine id not found - " + id);
             }
 
             return new ResponseEntity<Optional<Machines>>(machine, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>(
-                    "An error occurred while catching the machine - " + machineId + ": " + e.getMessage(),
+                    "An error occurred while catching the machine - " + id + ": " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
-    @PutMapping("/machines/{machineId}")
-    public ResponseEntity<?> updateMachines(@RequestBody Machines machines, @PathVariable UUID machineId) {
+    @PutMapping("/machines/{id}")
+    public ResponseEntity<?> updateMachines(@RequestBody Machines machines, @PathVariable UUID id) {
         try {
-            Machines dbMachine = machineServices.updateMachine(machines, machineId);
+            Machines dbMachine = machineServices.updateMachine(machines, id);
 
             return new ResponseEntity<Machines>(dbMachine, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>(
-                    "An error occurred while updating the machine - " + machineId + ": " + e.getMessage(),
+                    "An error occurred while updating the machine - " + id + ": " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
-    @DeleteMapping("/machines/{machineId}")
-    public ResponseEntity<String> deleteMachine(@PathVariable UUID machineId) {
+    @DeleteMapping("/machines/{id}")
+    public ResponseEntity<String> deleteMachine(@PathVariable UUID id) {
         try {
-            machineServices.deleteMachine(machineId);
+            machineServices.deleteMachine(id);
 
-            return new ResponseEntity<String>("Deleted machine id - " + machineId, HttpStatus.OK);
+            return new ResponseEntity<String>("Deleted machine id - " + id, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<String>(
-                    "An error occurred while deleting the machine - " + machineId + ": " + e.getMessage(),
+                    "An error occurred while deleting the machine - " + id + ": " + e.getMessage(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

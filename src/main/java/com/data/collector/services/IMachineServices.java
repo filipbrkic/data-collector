@@ -17,7 +17,7 @@ public interface IMachineServices {
 
     Optional<Machines> findById(UUID id);
 
-    Machines updateMachine(Machines machine, UUID machineId);
+    Machines updateMachine(Machines machine, UUID id);
 
     void deleteMachine(UUID id);
 }

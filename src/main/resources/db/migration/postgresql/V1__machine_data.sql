@@ -2,7 +2,6 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE machines (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  machine_id UUID NOT NULL,
   hostname VARCHAR(255),
   timeout INT,
   num_gpus INT,

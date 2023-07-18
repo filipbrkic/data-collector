@@ -39,7 +39,7 @@ class CollectorApplicationTests {
     }
 
     @Test
-    void contextLoads() throws IOException {
+    void findAllTest() throws IOException {
         when(machineServices.findAll()).thenReturn(fakeData);
         List<Machines> machines = machineServices.findAll();
 
