@@ -25,7 +25,7 @@ public class Scheduler {
         this.slackAlerts = slackAlerts;
     }
 
-    @Scheduled(cron = "0 0/25 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void cronJobSch() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now = new Date();
@@ -36,6 +36,7 @@ public class Scheduler {
 
         List<Map<String, Object>> data = machines.stream().map(machine -> {
             Map<String, Object> machineData = new HashMap<>();
+            machineData.put("id", machine.getId());
             machineData.put("error_description", machine.getError_description());
             machineData.put("timeout", machine.getTimeout());
             machineData.put("gpu_max_cur_temp", machine.getGpu_max_cur_temp());
