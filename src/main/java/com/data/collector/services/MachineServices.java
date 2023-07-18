@@ -12,17 +12,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.data.collector.models.Machines;
-import com.data.collector.repositories.IGenericRepository;
+import com.data.collector.repositories.IMachineRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class MachineServices implements IMachineServices {
 
-    private IGenericRepository<Machines, UUID> genericRepository;
+    private IMachineRepository machineRepository;
 
-    public MachineServices(IGenericRepository<Machines, UUID> genericRepository) {
-        this.genericRepository = genericRepository;
+    public MachineServices(IMachineRepository machineRepository) {
+        this.machineRepository = machineRepository;
     }
 
     @Transactional
@@ -45,7 +45,7 @@ public class MachineServices implements IMachineServices {
             machine.setGpu_max_cur_temp(temperature);
             machine.setError_description(error_description);
 
-            return genericRepository.save(machine);
+            return machineRepository.save(machine);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -55,7 +55,7 @@ public class MachineServices implements IMachineServices {
     public Page<Machines> findAll(Integer pageNo, Integer pageSize) {
         try {
             Pageable paging = PageRequest.of(pageNo, pageSize);
-            return genericRepository.findAll(paging);
+            return machineRepository.findAll(paging);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -64,7 +64,7 @@ public class MachineServices implements IMachineServices {
     @Override
     public List<Machines> findAll() {
         try {
-            return genericRepository.findAll();
+            return machineRepository.findAll();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -73,7 +73,7 @@ public class MachineServices implements IMachineServices {
     @Override
     public Optional<Machines> findById(UUID id) {
         try {
-            return genericRepository.findById(id);
+            return machineRepository.findById(id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -83,7 +83,7 @@ public class MachineServices implements IMachineServices {
     @Override
     public Machines updateMachine(Machines machine, UUID machineId) {
         try {
-            Machines existingMachine = genericRepository.getReferenceById(machineId);
+            Machines existingMachine = machineRepository.getReferenceById(machineId);
 
             if (existingMachine == null) {
                 throw new RuntimeException("Machine id not found - " + machineId);
@@ -116,7 +116,7 @@ public class MachineServices implements IMachineServices {
             existingMachine.setGpu_max_cur_temp(existingMachine.getGpu_max_cur_temp());
             existingMachine.setError_description(existingMachine.getError_description());
 
-            return genericRepository.save(existingMachine);
+            return machineRepository.save(existingMachine);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -126,13 +126,13 @@ public class MachineServices implements IMachineServices {
     @Override
     public void deleteMachine(UUID id) {
         try {
-            Machines machine = genericRepository.getReferenceById(id);
+            Machines machine = machineRepository.getReferenceById(id);
 
             if (machine == null) {
                 throw new RuntimeException("Machine id not found - " + id);
             }
 
-            genericRepository.deleteById(id);
+            machineRepository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
