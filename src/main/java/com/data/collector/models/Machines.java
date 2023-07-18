@@ -50,6 +50,21 @@ public class Machines {
     public Machines() {
     }
 
+    public Machines(UUID id, String hostname, int timeout, int num_gpus, float total_flops, String gpu_name,
+            int gpu_ram, int gpu_max_cur_temp, String cpu_name, float earn_day, String error_description) {
+        this.id = id;
+        this.hostname = hostname;
+        this.timeout = timeout;
+        this.num_gpus = num_gpus;
+        this.total_flops = total_flops;
+        this.gpu_name = gpu_name;
+        this.gpu_ram = gpu_ram;
+        this.gpu_max_cur_temp = gpu_max_cur_temp;
+        this.cpu_name = cpu_name;
+        this.earn_day = earn_day;
+        this.error_description = error_description;
+    }
+
     public UUID getId() {
         return this.id;
     }
