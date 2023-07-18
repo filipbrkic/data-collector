@@ -23,7 +23,7 @@ public class Machines {
     @Column(name = "timeout")
     private int timeout;
 
-    @Column(name = "num_gpus")
+    @Column(name = "gpu_quantity")
     private int num_gpus;
 
     @Column(name = "total_flops")
@@ -35,7 +35,7 @@ public class Machines {
     @Column(name = "gpu_ram")
     private int gpu_ram;
 
-    @Column(name = "gpu_max_cur_temp")
+    @Column(name = "gpu_max_current_temperature")
     private int gpu_max_cur_temp;
 
     @Column(name = "cpu_name")
