@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.data.collector.helper.ISchedulerHelper;
 import com.data.collector.models.Machines;
 import com.data.collector.services.IMachineServices;
 import com.data.collector.utils.SlackAlerts;
@@ -19,13 +20,15 @@ public class Scheduler {
 
     private IMachineServices machineServices;
     private SlackAlerts slackAlerts;
+    private ISchedulerHelper schedulerHelper;
 
-    public Scheduler(IMachineServices machineServices, SlackAlerts slackAlerts) {
+    public Scheduler(IMachineServices machineServices, SlackAlerts slackAlerts, ISchedulerHelper schedulerHelper) {
         this.machineServices = machineServices;
         this.slackAlerts = slackAlerts;
+        this.schedulerHelper = schedulerHelper;
     }
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void cronJobSch() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         Date now = new Date();
@@ -45,6 +48,9 @@ public class Scheduler {
         }).collect(Collectors.toList());
 
         slackAlerts.notifications(data);
+
+        schedulerHelper.updateMachineData(data);
+
         System.out.println("Cron job finished.");
     }
 }

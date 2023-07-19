@@ -2,15 +2,14 @@ package com.data.collector.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.data.collector.helper.IMachineHelper;
 import com.data.collector.models.Machines;
 import com.data.collector.repositories.IMachineRepository;
 
@@ -20,34 +19,20 @@ import jakarta.transaction.Transactional;
 public class MachineServices implements IMachineServices {
 
     private IMachineRepository machineRepository;
+    private IMachineHelper machineHelper;
 
-    public MachineServices(IMachineRepository machineRepository) {
+    public MachineServices(IMachineRepository machineRepository, IMachineHelper machineHelper) {
         this.machineRepository = machineRepository;
+        this.machineHelper = machineHelper;
     }
 
     @Transactional
     @Override
     public Machines addMachine(Machines machine) {
         try {
-            Random rd = new Random();
+            Machines newMachine = machineHelper.dataGenerator(machine);
 
-            String error_description = null;
-            int timeout = ThreadLocalRandom.current().nextInt(0, 2);
-            int temperature = ThreadLocalRandom.current().nextInt(85, 95);
-            float earn_day = ThreadLocalRandom.current().nextFloat(0, 20);
-            float total_flops = ThreadLocalRandom.current().nextFloat(0, 20);
-
-            if (!rd.nextBoolean()) {
-                error_description = "Unknown Error";
-            }
-
-            machine.setTimeout(timeout);
-            machine.setGpu_max_cur_temp(temperature);
-            machine.setError_description(error_description);
-            machine.setEarn_day(earn_day);
-            machine.setTotal_flops(total_flops);
-
-            return machineRepository.save(machine);
+            return machineRepository.save(newMachine);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -132,5 +117,28 @@ public class MachineServices implements IMachineServices {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Transactional
+    @Override
+    public Machines updateMachineForCron(Machines machine, UUID id) {
+        Machines existingMachine = machineRepository.getReferenceById(id);
+
+        if (existingMachine == null) {
+            throw new RuntimeException("Machine id not found - " + id);
+        }
+        existingMachine.setHostname(existingMachine.getHostname());
+        existingMachine.setNum_gpus(existingMachine.getNum_gpus());
+        existingMachine.setGpu_name(existingMachine.getGpu_name());
+        existingMachine.setGpu_ram(existingMachine.getGpu_ram());
+        existingMachine.setCpu_name(existingMachine.getCpu_name());
+        existingMachine.setTimeout(existingMachine.getTimeout());
+        existingMachine.setGpu_max_cur_temp(existingMachine.getGpu_max_cur_temp());
+        existingMachine.setEarn_day(existingMachine.getEarn_day());
+        existingMachine.setTotal_flops(existingMachine.getTotal_flops());
+
+        Machines newMachine = machineHelper.dataGenerator(existingMachine);
+
+        return machineRepository.save(newMachine);
     }
 }

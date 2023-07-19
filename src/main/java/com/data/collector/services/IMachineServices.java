@@ -20,4 +20,6 @@ public interface IMachineServices {
     Machines updateMachine(Machines machine, UUID id);
 
     void deleteMachine(UUID id);
+
+    Machines updateMachineForCron(Machines machine, UUID id);
 }
