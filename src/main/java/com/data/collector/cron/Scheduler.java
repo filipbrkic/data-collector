@@ -2,28 +2,22 @@ package com.data.collector.cron;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.data.collector.helper.ISchedulerHelper;
-import com.data.collector.models.Machines;
-import com.data.collector.services.IMachineServices;
 import com.data.collector.utils.SlackAlerts;
 
 @Component
 public class Scheduler {
 
-    private IMachineServices machineServices;
     private SlackAlerts slackAlerts;
     private ISchedulerHelper schedulerHelper;
 
-    public Scheduler(IMachineServices machineServices, SlackAlerts slackAlerts, ISchedulerHelper schedulerHelper) {
-        this.machineServices = machineServices;
+    public Scheduler(SlackAlerts slackAlerts, ISchedulerHelper schedulerHelper) {
         this.slackAlerts = slackAlerts;
         this.schedulerHelper = schedulerHelper;
     }
@@ -35,17 +29,7 @@ public class Scheduler {
         String strDate = sdf.format(now);
         System.out.println("Cron job started:: " + strDate);
 
-        List<Machines> machines = machineServices.findAll();
-
-        List<Map<String, Object>> data = machines.stream().map(machine -> {
-            Map<String, Object> machineData = new HashMap<>();
-            machineData.put("id", machine.getId());
-            machineData.put("error_description", machine.getError_description());
-            machineData.put("timeout", machine.getTimeout());
-            machineData.put("gpu_max_cur_temp", machine.getGpu_max_cur_temp());
-            machineData.put("hostname", machine.getHostname());
-            return machineData;
-        }).collect(Collectors.toList());
+        List<Map<String, Object>> data = schedulerHelper.machineData();
 
         slackAlerts.notifications(data);
 

@@ -5,4 +5,6 @@ import java.util.Map;
 
 public interface ISchedulerHelper {
     void updateMachineData(List<Map<String, Object>> data);
+
+    List<Map<String, Object>> machineData();
 }

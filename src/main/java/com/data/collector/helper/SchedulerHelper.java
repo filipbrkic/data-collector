@@ -1,9 +1,11 @@
 package com.data.collector.helper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -37,6 +39,23 @@ public class SchedulerHelper implements ISchedulerHelper {
                 System.out.println("Invalid UUID: " + idObject);
             }
         }
+    }
+
+    @Override
+    public List<Map<String, Object>> machineData() {
+        List<Machines> machines = machineServices.findAll();
+
+        List<Map<String, Object>> data = machines.stream().map(machine -> {
+            Map<String, Object> machineData = new HashMap<>();
+            machineData.put("id", machine.getId());
+            machineData.put("error_description", machine.getError_description());
+            machineData.put("timeout", machine.getTimeout());
+            machineData.put("gpu_max_cur_temp", machine.getGpu_max_cur_temp());
+            machineData.put("hostname", machine.getHostname());
+            return machineData;
+        }).collect(Collectors.toList());
+
+        return data;
     }
 
 }
