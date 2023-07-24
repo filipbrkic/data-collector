@@ -10,8 +10,3 @@ services:
       - POSTGRESQL_USERNAME=postgres
     ports:
       - "5431:5432"
-    networks:
-      - backend
-
-networks:
-  backend:
