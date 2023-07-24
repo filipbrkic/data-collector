@@ -122,23 +122,27 @@ public class MachineServices implements IMachineServices {
     @Transactional
     @Override
     public Machines updateMachineForCron(Machines machine, UUID id) {
-        Machines existingMachine = machineRepository.getReferenceById(id);
+        try {
+            Machines existingMachine = machineRepository.getReferenceById(id);
 
-        if (existingMachine == null) {
-            throw new RuntimeException("Machine id not found - " + id);
+            if (existingMachine == null) {
+                throw new RuntimeException("Machine id not found - " + id);
+            }
+            existingMachine.setHostname(existingMachine.getHostname());
+            existingMachine.setNum_gpus(existingMachine.getNum_gpus());
+            existingMachine.setGpu_name(existingMachine.getGpu_name());
+            existingMachine.setGpu_ram(existingMachine.getGpu_ram());
+            existingMachine.setCpu_name(existingMachine.getCpu_name());
+            existingMachine.setTimeout(existingMachine.getTimeout());
+            existingMachine.setGpu_max_cur_temp(existingMachine.getGpu_max_cur_temp());
+            existingMachine.setEarn_day(existingMachine.getEarn_day());
+            existingMachine.setTotal_flops(existingMachine.getTotal_flops());
+
+            Machines newMachine = machineHelper.dataGenerator(existingMachine);
+
+            return machineRepository.save(newMachine);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        existingMachine.setHostname(existingMachine.getHostname());
-        existingMachine.setNum_gpus(existingMachine.getNum_gpus());
-        existingMachine.setGpu_name(existingMachine.getGpu_name());
-        existingMachine.setGpu_ram(existingMachine.getGpu_ram());
-        existingMachine.setCpu_name(existingMachine.getCpu_name());
-        existingMachine.setTimeout(existingMachine.getTimeout());
-        existingMachine.setGpu_max_cur_temp(existingMachine.getGpu_max_cur_temp());
-        existingMachine.setEarn_day(existingMachine.getEarn_day());
-        existingMachine.setTotal_flops(existingMachine.getTotal_flops());
-
-        Machines newMachine = machineHelper.dataGenerator(existingMachine);
-
-        return machineRepository.save(newMachine);
     }
 }

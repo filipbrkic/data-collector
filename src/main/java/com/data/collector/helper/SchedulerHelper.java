@@ -23,39 +23,47 @@ public class SchedulerHelper implements ISchedulerHelper {
 
     @Override
     public void updateMachineData(List<Map<String, Object>> data) {
-        for (Map<String, Object> i : data) {
-            Object idObject = i.get("id");
-            if (idObject instanceof UUID) {
-                UUID id = (UUID) idObject;
-                Optional<Machines> machineOptional = machineServices.findById(id);
+        try {
+            for (Map<String, Object> i : data) {
+                Object idObject = i.get("id");
+                if (idObject instanceof UUID) {
+                    UUID id = (UUID) idObject;
+                    Optional<Machines> machineOptional = machineServices.findById(id);
 
-                if (machineOptional.isPresent()) {
-                    Machines machine = machineOptional.get();
-                    machineServices.updateMachineForCron(machine, id);
+                    if (machineOptional.isPresent()) {
+                        Machines machine = machineOptional.get();
+                        machineServices.updateMachineForCron(machine, id);
+                    } else {
+                        System.out.println("Machine not found for id: " + id);
+                    }
                 } else {
-                    System.out.println("Machine not found for id: " + id);
+                    System.out.println("Invalid UUID: " + idObject);
                 }
-            } else {
-                System.out.println("Invalid UUID: " + idObject);
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public List<Map<String, Object>> machineData() {
-        List<Machines> machines = machineServices.findAll();
+        try {
+            List<Machines> machines = machineServices.findAll();
 
-        List<Map<String, Object>> data = machines.stream().map(machine -> {
-            Map<String, Object> machineData = new HashMap<>();
-            machineData.put("id", machine.getId());
-            machineData.put("error_description", machine.getError_description());
-            machineData.put("timeout", machine.getTimeout());
-            machineData.put("gpu_max_cur_temp", machine.getGpu_max_cur_temp());
-            machineData.put("hostname", machine.getHostname());
-            return machineData;
-        }).collect(Collectors.toList());
+            List<Map<String, Object>> data = machines.stream().map(machine -> {
+                Map<String, Object> machineData = new HashMap<>();
+                machineData.put("id", machine.getId());
+                machineData.put("error_description", machine.getError_description());
+                machineData.put("timeout", machine.getTimeout());
+                machineData.put("gpu_max_cur_temp", machine.getGpu_max_cur_temp());
+                machineData.put("hostname", machine.getHostname());
+                return machineData;
+            }).collect(Collectors.toList());
 
-        return data;
+            return data;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
