@@ -1,7 +1,7 @@
 [
   {
     "id": "890842aa-1234-5432-a1c3-49286c856d50",
-    "hostname": "test-machine-name-1",
+    "hostname": "test-machine-1",
     "timeout": 0,
     "num_gpus": 8,
     "total_flops": 20.21,
@@ -14,7 +14,7 @@
   },
   {
     "id": "9fac5df8-1234-4321-9fe9-f0ff07bd00f4",
-    "hostname": "test-machine-name-2",
+    "hostname": "test-machine-2",
     "timeout": 5,
     "num_gpus": 12,
     "total_flops": 50.55,
