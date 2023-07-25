@@ -9,16 +9,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.data.collector.helper.ISchedulerHelper;
-import com.data.collector.utils.SlackAlerts;
+import com.data.collector.services.ISlackAlertsServices;
 
 @Component
 public class Scheduler {
 
-    private SlackAlerts slackAlerts;
+    private ISlackAlertsServices slackAlertsServices;
     private ISchedulerHelper schedulerHelper;
 
-    public Scheduler(SlackAlerts slackAlerts, ISchedulerHelper schedulerHelper) {
-        this.slackAlerts = slackAlerts;
+    public Scheduler(ISlackAlertsServices slackAlertsServices, ISchedulerHelper schedulerHelper) {
+        this.slackAlertsServices = slackAlertsServices;
         this.schedulerHelper = schedulerHelper;
     }
 
@@ -31,7 +31,7 @@ public class Scheduler {
 
         List<Map<String, Object>> data = schedulerHelper.machineData();
 
-        slackAlerts.notifications(data);
+        slackAlertsServices.notifications(data);
 
         schedulerHelper.updateMachineData(data);
 
