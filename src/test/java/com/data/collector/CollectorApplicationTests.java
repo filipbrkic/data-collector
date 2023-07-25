@@ -95,9 +95,7 @@ class CollectorApplicationTests {
                 message = slackAlertsHelper.generateTimeoutMessage(machineData, message);
             }
         }
-        System.out.println("Length of message: " + message.size());
 
-        System.out.println("Length of message: " + expectedMessage.size());
         assertEquals(expectedMessage, message);
     }
 
