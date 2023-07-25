@@ -33,6 +33,7 @@ public class Scheduler {
 
         slackAlertsServices.notifications(data);
 
+        // This part is made so it seems like data is dynamic
         schedulerHelper.updateMachineData(data);
 
         System.out.println("Cron job finished.");
