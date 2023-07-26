@@ -76,7 +76,7 @@ class CollectorApplicationTests {
     @Test
     void slackAlertsTimeoutMessage() throws IOException {
 
-        Machines[] machines = createMachines(100, "timeout");
+        Machines[] machines = createMachines(100);
         ArrayList<String> expectedMessage = new ArrayList<>();
         ArrayList<String> message = new ArrayList<>();
 
@@ -95,36 +95,30 @@ class CollectorApplicationTests {
                 message = slackAlertsHelper.generateTimeoutMessage(machineData, message);
             }
         }
-
+        System.out.println(expectedMessage.size());
         assertEquals(expectedMessage, message);
     }
 
-    Machines[] createMachines(Integer number, String string) {
+    Machines[] createMachines(Integer number) {
         int count = 0;
 
         Machines[] machineInstances = new Machines[number];
 
         while (number > count) {
-            machineInstances[count] = this.instance(string);
+            machineInstances[count] = this.instance();
             count++;
         }
 
         return machineInstances;
     }
 
-    Machines instance(String string) {
-        Machines machine = null;
-        if (string == "timeout") {
-            Random rd = new Random();
-            String error_description = null;
-            if (!rd.nextBoolean()) {
-                error_description = "Unknown Error";
-            }
-
-            machine = new Machines(null, string, ThreadLocalRandom.current().nextInt(0, 2), 0, 0, string, 0,
-                    ThreadLocalRandom.current().nextInt(85, 95), string, 0, error_description);
-
+    Machines instance() {
+        Random rd = new Random();
+        String error_description = null;
+        if (!rd.nextBoolean()) {
+            error_description = "Unknown Error";
         }
-        return machine;
+        return new Machines(null, "hostname", ThreadLocalRandom.current().nextInt(0, 2), 0, 0, "gpu name", 0,
+                ThreadLocalRandom.current().nextInt(85, 95), "cpu name", 0, error_description);
     }
 }
