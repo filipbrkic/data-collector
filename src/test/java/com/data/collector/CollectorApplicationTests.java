@@ -77,6 +77,7 @@ class CollectorApplicationTests {
     void slackAlertsTimeoutMessage() throws IOException {
 
         Machines[] machines = createMachines(100);
+
         ArrayList<String> expectedMessage = new ArrayList<>();
         ArrayList<String> message = new ArrayList<>();
 
@@ -114,11 +115,7 @@ class CollectorApplicationTests {
 
     Machines instance() {
         Random rd = new Random();
-        String error_description = null;
-        if (!rd.nextBoolean()) {
-            error_description = "Unknown Error";
-        }
         return new Machines(null, "hostname", ThreadLocalRandom.current().nextInt(0, 2), 0, 0, "gpu name", 0,
-                ThreadLocalRandom.current().nextInt(85, 95), "cpu name", 0, error_description);
+                ThreadLocalRandom.current().nextInt(85, 95), "cpu name", 0, rd.nextBoolean() ? null : "Unknown Error");
     }
 }
