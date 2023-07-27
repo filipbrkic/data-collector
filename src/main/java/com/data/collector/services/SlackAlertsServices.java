@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.data.collector.helper.ISlackAlertsHelper;
-
 import org.springframework.stereotype.Service;
+
+import com.data.collector.helper.ISlackAlertsHelper;
 
 @Service
 public class SlackAlertsServices implements ISlackAlertsServices {
